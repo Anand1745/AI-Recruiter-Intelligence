@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Virtual environments
+venv/
+.env
+
+# VS Code
+.vscode/
+
+# Outputs
+outputs/
+models/
+cache/
+
+# Large datasets
+data/candidates.jsonl
+data/sample_candidates.json
+
+# System files
+.DS_Store
+Thumbs.db
