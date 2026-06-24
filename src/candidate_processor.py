@@ -15,12 +15,21 @@ class CandidateProcessor:
             "current_company": profile.get("current_company"),
             "industry": profile.get("current_industry"),
         }
-    
-    def process_skills(self, candidate):
-        skills = candidate.get("skills", [])
 
-        return [s["name"] for s in skills]
+    def process_skills(self, candidate):
+
+        skills = [
+            s["name"]
+            for s in candidate.get("skills", [])
+        ]
+
+        return {
+            "skills_list": skills,
+            "skills_text": " ".join(skills),
+            "num_skills": len(skills)
+        }
     
+
     def process_education(self, candidate):
         education = candidate.get("education", [])
 
