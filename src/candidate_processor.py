@@ -1,20 +1,19 @@
 class CandidateProcessor:
-
+    
     def process_profile(self, candidate):
         profile = candidate.get("profile", {})
 
         return {
-            "candidate_id": candidate.get("candidate_id"),
             "name": profile.get("anonymized_name"),
             "headline": profile.get("headline"),
             "summary": profile.get("summary"),
             "location": profile.get("location"),
             "country": profile.get("country"),
-            "years_experience": profile.get("years_of_experience"),
+            "years_experience": profile.get("years_of_experience", 0),
             "current_title": profile.get("current_title"),
             "current_company": profile.get("current_company"),
-            "industry": profile.get("current_industry"),
-        }
+            "industry": profile.get("current_industry")
+        }   
 
     def process_skills(self, candidate):
 
