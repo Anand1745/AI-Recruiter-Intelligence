@@ -4,7 +4,10 @@ class ReasoningEngine:
 
         score = candidate["final_score"]
 
+        # ----------------------------------
         # Recommendation
+        # ----------------------------------
+
         if score >= 0.85:
             recommendation = "⭐⭐⭐⭐⭐ Strong Hire"
             confidence = "Very High"
@@ -24,47 +27,170 @@ class ReasoningEngine:
         strengths = []
         gaps = []
 
+        # ----------------------------------
         # Experience
-        if candidate["experience_match"]:
-            strengths.append("Meets required experience")
-        else:
-            gaps.append("Does not meet required experience")
+        # ----------------------------------
 
-        # Skills
-        if candidate["matched_skills"]:
+        if candidate["experience_match"]:
+
             strengths.append(
-                f"Matched {len(candidate['matched_skills'])} required skill(s): "
-                + ", ".join(candidate["matched_skills"])
+                "Meets required experience."
             )
+
+        else:
+
+            gaps.append(
+                "Does not meet the required experience."
+            )
+
+        # ----------------------------------
+        # Direct Skill Matches
+        # ----------------------------------
+
+        if candidate["matched_skills"]:
+
+            strengths.append(
+
+                f"Direct skill matches ({len(candidate['matched_skills'])}): "
+
+                + ", ".join(candidate["matched_skills"])
+
+            )
+
+        # ----------------------------------
+        # Transferable Skill Intelligence
+        # ----------------------------------
+
+        if candidate["transferable_matches"]:
+
+            for match in candidate["transferable_matches"]:
+
+                if match["category"] == "Cloud":
+
+                    explanation = (
+                        "Cloud platform knowledge is highly transferable."
+                    )
+
+                elif match["category"] == "Python Web":
+
+                    explanation = (
+                        "Python web framework experience suggests a short learning curve."
+                    )
+
+                elif match["category"] == "Databases":
+
+                    explanation = (
+                        "Relational database concepts are highly transferable."
+                    )
+
+                elif match["category"] == "Containers":
+
+                    explanation = (
+                        "Containerization experience transfers effectively."
+                    )
+
+                elif match["category"] == "ML Frameworks":
+
+                    explanation = (
+                        "Deep learning framework experience is transferable."
+                    )
+
+                else:
+
+                    explanation = (
+                        "Related technical knowledge identified."
+                    )
+
+                strengths.append(
+
+                    f"{match['candidate_skill'].title()} → "
+
+                    f"{match['required_skill'].title()} "
+
+                    f"({int(match['confidence'] * 100)}%) - "
+
+                    f"{explanation}"
+
+                )
+
+        # ----------------------------------
+        # Missing Skills
+        # ----------------------------------
 
         if candidate["missing_skills"]:
+
             gaps.append(
-                f"Missing {len(candidate['missing_skills'])} required skill(s): "
+
+                "Missing skills: "
+
                 + ", ".join(candidate["missing_skills"])
+
             )
 
-        # Semantic
+        # ----------------------------------
+        # Semantic Alignment
+        # ----------------------------------
+
         semantic = candidate["semantic_score"]
 
         if semantic >= 0.70:
-            strengths.append("Excellent semantic alignment with job description")
+
+            strengths.append(
+                "Excellent semantic alignment with the job description."
+            )
+
         elif semantic >= 0.60:
-            strengths.append("Good semantic alignment with job description")
+
+            strengths.append(
+                "Good semantic alignment with the job description."
+            )
+
         else:
-            gaps.append("Weak semantic alignment with job description")
+
+            if candidate["num_transferable_matches"] > 0:
+
+                strengths.append(
+                    "Transferable technical expertise helps compensate for moderate semantic alignment."
+                )
+
+            else:
+
+                gaps.append(
+                    "Resume shows limited alignment with the overall job requirements."
+                )
+
+        # ----------------------------------
+        # Executive Summary
+        # ----------------------------------
 
         summary = (
+
             f"The candidate achieved an overall match score of "
-            f"{score:.2%}. Based on semantic relevance, "
-            f"experience and technical skills, the recommendation "
-            f"is '{recommendation}'."
+
+            f"{score:.2%}. "
+
+            f"The recommendation is based on semantic similarity, "
+
+            f"professional experience, direct skill matches, "
+
+            f"and AI-powered transferable skill intelligence "
+
+            f"to assess both immediate suitability and long-term potential."
+
         )
+
+        # ----------------------------------
+        # Return Evaluation
+        # ----------------------------------
 
         return {
 
             "candidate_name": candidate["name"],
 
-            "overall_match": round(score * 100, 2),
+            "overall_match": round(
+                score * 100,
+                2
+            ),
 
             "recommendation": recommendation,
 
@@ -79,7 +205,7 @@ class ReasoningEngine:
             "metrics": {
 
                 "semantic_score": round(
-                    candidate["semantic_score"] * 100,
+                    semantic * 100,
                     2
                 ),
 
@@ -88,8 +214,15 @@ class ReasoningEngine:
                     2
                 ),
 
+                "transferable_matches":
+                    candidate[
+                        "num_transferable_matches"
+                    ],
+
                 "experience_match":
-                    candidate["experience_match"]
+                    candidate[
+                        "experience_match"
+                    ]
 
             }
 

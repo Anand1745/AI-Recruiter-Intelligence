@@ -1,73 +1,154 @@
 class ComparisonEngine:
 
-    def compare(self, candidate1, candidate2):
+    def compare(
+        self,
+        candidate_a,
+        candidate_b
+    ):
 
-        comparison = {
+        advantages = []
 
-            "candidate_1": candidate1["name"],
-            "candidate_2": candidate2["name"],
-            "winner": None,
-            "score_difference": round(
-                abs(candidate1["final_score"] - candidate2["final_score"]),
-                4
-            ),
-            "advantages": [],
-            "recommendation": ""
+        # ---------------------------------------
+        # Overall Winner
+        # ---------------------------------------
 
-        }
+        if candidate_a["final_score"] >= candidate_b["final_score"]:
 
-        if candidate1["final_score"] > candidate2["final_score"]:
-            comparison["winner"] = candidate1["name"]
+            winner = candidate_a
+
         else:
-            comparison["winner"] = candidate2["name"]
+
+            winner = candidate_b
+
+        # ---------------------------------------
+        # Semantic Similarity
+        # ---------------------------------------
+
+        if candidate_a["semantic_score"] > candidate_b["semantic_score"]:
+
+            advantages.append(
+
+                f"{candidate_a['name']} has stronger semantic alignment."
+
+            )
+
+        elif candidate_b["semantic_score"] > candidate_a["semantic_score"]:
+
+            advantages.append(
+
+                f"{candidate_b['name']} has stronger semantic alignment."
+
+            )
+
+        # ---------------------------------------
+        # Direct Skill Match
+        # ---------------------------------------
+
+        if candidate_a["skill_match"] > candidate_b["skill_match"]:
+
+            advantages.append(
+
+                f"{candidate_a['name']} matches more required skills."
+
+            )
+
+        elif candidate_b["skill_match"] > candidate_a["skill_match"]:
+
+            advantages.append(
+
+                f"{candidate_b['name']} matches more required skills."
+
+            )
+
+        # ---------------------------------------
+        # Experience
+        # ---------------------------------------
 
         if (
-            candidate1["experience_match"]
+            candidate_a["experience_match"]
             and
-            not candidate2["experience_match"]
+            not candidate_b["experience_match"]
         ):
 
-            comparison["advantages"].append(
-                f"{candidate1['name']} meets the required experience."
+            advantages.append(
+
+                f"{candidate_a['name']} satisfies the required experience."
+
             )
 
         elif (
-            candidate2["experience_match"]
+            candidate_b["experience_match"]
             and
-            not candidate1["experience_match"]
+            not candidate_a["experience_match"]
         ):
 
-            comparison["advantages"].append(
-                f"{candidate2['name']} meets the required experience."
+            advantages.append(
+
+                f"{candidate_b['name']} satisfies the required experience."
+
             )
 
-        if candidate1["skill_match"] > candidate2["skill_match"]:
+        # ---------------------------------------
+        # Talent Intelligence
+        # ---------------------------------------
 
-            comparison["advantages"].append(
-                f"{candidate1['name']} matches more required skills."
+        if (
+            candidate_a["num_transferable_matches"]
+            >
+            candidate_b["num_transferable_matches"]
+        ):
+
+            advantages.append(
+
+                f"{candidate_a['name']} demonstrates stronger transferable technical skills."
+
             )
 
-        elif candidate2["skill_match"] > candidate1["skill_match"]:
+        elif (
+            candidate_b["num_transferable_matches"]
+            >
+            candidate_a["num_transferable_matches"]
+        ):
 
-            comparison["advantages"].append(
-                f"{candidate2['name']} matches more required skills."
+            advantages.append(
+
+                f"{candidate_b['name']} demonstrates stronger transferable technical skills."
+
             )
 
-        if candidate1["semantic_score"] > candidate2["semantic_score"]:
+        # ---------------------------------------
+        # Final Recommendation
+        # ---------------------------------------
 
-            comparison["advantages"].append(
-                f"{candidate1['name']} has better semantic alignment."
-            )
+        recommendation = (
 
-        elif candidate2["semantic_score"] > candidate1["semantic_score"]:
-
-            comparison["advantages"].append(
-                f"{candidate2['name']} has better semantic alignment."
-            )
-
-        comparison["recommendation"] = (
             f"Recommend interviewing "
-            f"{comparison['winner']} first."
+
+            f"{winner['name']} first based on the "
+
+            f"highest overall evaluation score."
+
+        )
+        
+        advantages.insert(
+
+            0,
+
+            "Highest overall candidate score."
+
         )
 
-        return comparison
+        return {
+
+            "winner": winner["name"],
+
+            "winner_score": round(
+                winner["final_score"] * 100,
+                2
+            ),
+
+            "recommendation": recommendation,
+
+            "advantages": advantages
+
+        }
