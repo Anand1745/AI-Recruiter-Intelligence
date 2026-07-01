@@ -7,21 +7,25 @@ class ReasoningEngine:
         # ----------------------------------
         # Recommendation
         # ----------------------------------
-
+        
         if score >= 0.85:
-            recommendation = "⭐⭐⭐⭐⭐ Strong Hire"
+            recommendation = "Strong Hire"
             confidence = "Very High"
 
         elif score >= 0.75:
-            recommendation = "⭐⭐⭐⭐ Interview"
+            recommendation = "Interview"
             confidence = "High"
 
-        elif score >= 0.60:
-            recommendation = "⭐⭐⭐ Consider"
+        elif score >= 0.65:
+            recommendation = "Consider"
             confidence = "Medium"
 
+        elif score >= 0.50:
+            recommendation = "Review"
+            confidence = "Low"
+
         else:
-            recommendation = "⭐⭐ Reject"
+            recommendation = "Reject"
             confidence = "Low"
 
         strengths = []

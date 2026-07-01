@@ -72,11 +72,15 @@ class RecruiterPipeline:
                 candidate
             )
 
+            redrob = self.processor.process_redrob(
+                candidate
+            )
+
             candidate_text = " ".join([
 
-                profile["headline"],
+                profile["headline"] or "",
 
-                profile["summary"],
+                profile["summary"] or "",
 
                 skills["skills_text"]
 
@@ -98,7 +102,7 @@ class RecruiterPipeline:
 
                 skills,
 
-                parsed_jd
+                parsed_jd,
 
             )
 

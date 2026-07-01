@@ -4,7 +4,6 @@ from src.recruiter_intelligence import RecruiterIntelligence
 class RankingEngine:
 
     def __init__(self):
-
         self.intelligence = RecruiterIntelligence()
 
     def rank(
@@ -15,20 +14,19 @@ class RankingEngine:
         parsed_jd
     ):
 
-        # -------------------------
+        # ---------------------------------------------------
         # Experience
-        # -------------------------
+        # ---------------------------------------------------
 
         candidate_exp = profile["years_experience"]
         required_exp = parsed_jd["minimum_experience"]
 
         experience_match = candidate_exp >= required_exp
+        experience_score = 1.0 if experience_match else 0.0
 
-        experience_bonus = 0.05 if experience_match else -0.05
-
-        # -------------------------
+        # ---------------------------------------------------
         # Skills
-        # -------------------------
+        # ---------------------------------------------------
 
         candidate_skills = {
             skill.lower().strip()
@@ -42,9 +40,9 @@ class RankingEngine:
 
         matched_skills = candidate_skills & required_skills
 
-        # -------------------------
-        # Talent Intelligence
-        # -------------------------
+        # ---------------------------------------------------
+        # Transferable Skills
+        # ---------------------------------------------------
 
         transferable_matches = (
             self.intelligence.infer_transferable_skills(
@@ -64,44 +62,68 @@ class RankingEngine:
             - transferable_required
         )
 
-        # -------------------------
-        # Skill Scores
-        # -------------------------
+        # ---------------------------------------------------
+        # Skill Match
+        # ---------------------------------------------------
 
-        skill_match = (
-            len(matched_skills) / len(required_skills)
-            if required_skills else 1.0
-        )
+        if required_skills:
 
-        skill_bonus = 0.10 * skill_match
+            effective_matches = (
+                len(matched_skills)
+                + 0.6 * len(transferable_matches)
+            )
+
+            skill_match = min(
+                effective_matches / len(required_skills),
+                1.0
+            )
+
+        else:
+
+            skill_match = 1.0
+
+        # ---------------------------------------------------
+        # Transferable Bonus
+        # ---------------------------------------------------
 
         transferable_bonus = sum(
-            0.03 * match["confidence"]
+            0.01 * match["confidence"]
             for match in transferable_matches
         )
 
-        # Prevent transferable skills from outweighing direct matches
         transferable_bonus = min(
             transferable_bonus,
-            0.08
+            0.05
         )
 
-        # -------------------------
+        # ---------------------------------------------------
+        # Weighted Components
+        # ---------------------------------------------------
+
+        semantic_component = semantic_score * 0.35
+
+        skill_component = skill_match * 0.50
+
+        experience_component = experience_score * 0.10
+
+        transfer_component = transferable_bonus
+
+        # ---------------------------------------------------
         # Final Score
-        # -------------------------
+        # ---------------------------------------------------
 
         final_score = (
-            semantic_score
-            + experience_bonus
-            + skill_bonus
-            + transferable_bonus
+            semantic_component
+            + skill_component
+            + experience_component
+            + transfer_component
         )
 
         final_score = min(final_score, 1.0)
 
-        # -------------------------
+        # ---------------------------------------------------
         # Return
-        # -------------------------
+        # ---------------------------------------------------
 
         return {
 
@@ -112,8 +134,8 @@ class RankingEngine:
 
             "experience_match": experience_match,
 
-            "experience_bonus": round(
-                experience_bonus,
+            "experience_score": round(
+                experience_score,
                 4
             ),
 
@@ -138,6 +160,26 @@ class RankingEngine:
 
             "transferable_bonus": round(
                 transferable_bonus,
+                4
+            ),
+
+            "semantic_component": round(
+                semantic_component,
+                4
+            ),
+
+            "skill_component": round(
+                skill_component,
+                4
+            ),
+
+            "experience_component": round(
+                experience_component,
+                4
+            ),
+
+            "transfer_component": round(
+                transfer_component,
                 4
             ),
 

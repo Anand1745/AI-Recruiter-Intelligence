@@ -1,11 +1,35 @@
-Data Engineer
+Senior Full Stack Engineer
 
-Requirements:
-- Python
-- SQL
-- Spark
-- Hadoop
-- Databricks
-- AWS
-- Airflow
-- 4+ years experience
+Company: NovaTech
+
+Experience Required:
+5+ years
+
+Job Description
+
+We are looking for an experienced Full Stack Engineer who can build scalable web applications from frontend to backend. The candidate should have strong backend development skills along with modern frontend experience.
+
+Required Skills
+
+• Python
+• FastAPI
+• React
+• Next.js
+• PostgreSQL
+• Docker
+• Git
+
+Preferred Skills
+
+• AWS
+• Kubernetes
+• GraphQL
+• TypeScript
+
+Responsibilities
+
+• Build REST APIs
+• Design scalable architectures
+• Develop responsive frontend interfaces
+• Collaborate with DevOps teams
+• Write clean and maintainable code
