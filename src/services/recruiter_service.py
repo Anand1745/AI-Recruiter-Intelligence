@@ -3,9 +3,9 @@ from src.pipeline import RecruiterPipeline
 
 class RecruiterService:
 
-    def __init__(self, data_path):
+    def __init__(self, data_path=None):
 
-        self.pipeline = RecruiterPipeline(data_path)
+        self.pipeline = RecruiterPipeline()
 
         self.results = None
 

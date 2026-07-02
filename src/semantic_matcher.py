@@ -5,6 +5,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 class SemanticMatcher:
 
     def __init__(self):
+
         print("Loading embedding model...")
 
         self.model = SentenceTransformer(
@@ -13,11 +14,32 @@ class SemanticMatcher:
 
         print("Model loaded.")
 
-    def get_embedding(self, text):
-        return self.model.encode(
+        self.embedding_cache = {}
+
+    # --------------------------------------------------
+    # Get Embedding
+    # --------------------------------------------------
+
+    def get_embedding(
+        self,
+        text
+    ):
+
+        if text in self.embedding_cache:
+            return self.embedding_cache[text]
+
+        embedding = self.model.encode(
             text,
             convert_to_numpy=True
         )
+
+        self.embedding_cache[text] = embedding
+
+        return embedding
+
+    # --------------------------------------------------
+    # Existing Similarity (Keep for Compatibility)
+    # --------------------------------------------------
 
     def similarity(
         self,
@@ -34,3 +56,27 @@ class SemanticMatcher:
         )[0][0]
 
         return float(score)
+
+    # --------------------------------------------------
+    # NEW : Batch Similarity
+    # --------------------------------------------------
+
+    def batch_similarity(
+        self,
+        job_description,
+        candidate_embeddings
+    ):
+
+        jd_embedding = self.get_embedding(
+            job_description
+        )
+
+        scores = cosine_similarity(
+
+            [jd_embedding],
+
+            candidate_embeddings
+
+        )[0]
+
+        return scores

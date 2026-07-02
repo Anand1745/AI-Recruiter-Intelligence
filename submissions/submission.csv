@@ -1,0 +1,101 @@
+candidate_id,rank,score,reasoning
+CAND_0039754,1,0.8087,Matched 3 required skill(s); Meets experience requirement; 1 transferable skill(s); Strong behavioral signals; Good semantic alignment
+CAND_0053774,2,0.702,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0006324,3,0.7019,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0002025,4,0.7003,Matched 3 required skill(s); 1 transferable skill(s); Strong behavioral signals; Good semantic alignment
+CAND_0042642,5,0.7003,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0005085,6,0.6983,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0042262,7,0.698,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0075010,8,0.6973,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0063431,9,0.697,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0055414,10,0.6969,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0012713,11,0.6967,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0019175,12,0.6965,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0093684,13,0.6962,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0096943,14,0.6961,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0056713,15,0.6959,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0075849,16,0.6956,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0015831,17,0.6953,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0020828,18,0.6953,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0035542,19,0.6943,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0041211,20,0.6942,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0069940,21,0.6942,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0065111,22,0.694,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0074657,23,0.6939,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0085950,24,0.6939,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0008265,25,0.6938,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0093191,26,0.6935,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0073265,27,0.6927,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0022794,28,0.6925,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0002031,29,0.6924,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0024839,30,0.6923,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0075318,31,0.6919,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0001871,32,0.6917,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0030026,33,0.6913,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0092696,34,0.6911,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0043582,35,0.691,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0062884,36,0.691,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0012067,37,0.6909,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0066628,38,0.6908,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0070583,39,0.6905,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0010108,40,0.6904,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0092481,41,0.6903,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0018484,42,0.6899,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0032852,43,0.6897,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement
+CAND_0082407,44,0.6897,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0099445,45,0.6894,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement
+CAND_0079244,46,0.6892,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0045313,47,0.689,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0027554,48,0.6885,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0036549,49,0.6885,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0096304,50,0.6885,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0055257,51,0.6882,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0055510,52,0.6882,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0064475,53,0.6882,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0095141,54,0.6882,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0085663,55,0.688,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0007131,56,0.6879,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0082330,57,0.6878,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0051007,58,0.6876,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0039323,59,0.6873,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement
+CAND_0060894,60,0.6873,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0021757,61,0.6871,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0050155,62,0.6871,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0013810,63,0.687,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0047780,64,0.687,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0065941,65,0.6869,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0076474,66,0.6869,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0021290,67,0.6868,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0054916,68,0.6867,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0046871,69,0.6864,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0071336,70,0.6863,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0097598,71,0.6863,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0050222,72,0.6861,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0070407,73,0.6861,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0079280,74,0.6861,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement
+CAND_0060109,75,0.686,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0022008,76,0.6858,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0073287,77,0.6857,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0098809,78,0.6853,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0003117,79,0.6852,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0012799,80,0.6852,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0040030,81,0.6852,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0000828,82,0.685,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0088106,83,0.685,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0033062,84,0.6848,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0033585,85,0.6848,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0054951,86,0.6848,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0044789,87,0.6847,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement
+CAND_0047775,88,0.6847,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement; Good semantic alignment
+CAND_0071866,89,0.6846,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0025499,90,0.6845,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0051689,91,0.6845,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement
+CAND_0074606,92,0.6845,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0014179,93,0.6844,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0018764,94,0.6844,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement
+CAND_0057976,95,0.6844,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0070952,96,0.6844,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good recruiter engagement
+CAND_0012180,97,0.6843,Matched 2 required skill(s); Meets experience requirement; 2 transferable skill(s)
+CAND_0088630,98,0.684,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0002870,99,0.6839,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment
+CAND_0005287,100,0.6839,Matched 1 required skill(s); Meets experience requirement; 3 transferable skill(s); Good semantic alignment

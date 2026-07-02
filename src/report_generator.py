@@ -19,7 +19,7 @@ class ReportGenerator:
 
         report.append("")
         report.append(f"Candidate : {evaluation['candidate_name']}")
-        report.append(f"Overall Match : {evaluation['overall_match']}%")
+        report.append(f"Overall Match : {evaluation['overall_match']:.2f}%")
         report.append(f"Recommendation : {evaluation['recommendation']}")
         report.append(f"Confidence : {evaluation['confidence']}")
 
@@ -82,7 +82,7 @@ class ReportGenerator:
         )
 
         report.append(
-            f"Score : {learning['learning_score']}"
+            f"Score : {learning['learning_score']:.2f}"
         )
 
         report.append("")

@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from exporter import generate_excel
+from docx import Document
 
 
 # ----------------------------------------------------------
@@ -82,17 +83,34 @@ def show_input():
 
             if uploaded_file is not None:
 
+                # TXT
                 if uploaded_file.type == "text/plain":
 
                     job_description = uploaded_file.read().decode("utf-8")
 
-                    st.success("Text file loaded successfully.")
+                    st.success("TXT file loaded successfully.")
+
+                # DOCX
+                elif (
+                    uploaded_file.type
+                    == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                ):
+
+                    document = Document(uploaded_file)
+
+                    job_description = "\n".join(
+
+                        paragraph.text
+
+                        for paragraph in document.paragraphs
+
+                    )
+
+                    st.success("DOCX file loaded successfully.")
 
                 else:
 
-                    st.info(
-                        "DOCX support will be added in the next milestone."
-                    )
+                    st.error("Unsupported file format.")
 
         analyze = st.button(
 
@@ -120,6 +138,7 @@ def show_top_candidate(results, container):
             st.info(
                 "Run an analysis to view the best candidate."
             )
+
             return
 
         evaluation = results["evaluation"]
@@ -131,33 +150,54 @@ def show_top_candidate(results, container):
         )
 
         st.progress(
-            evaluation["overall_match"] / 100
+            float(evaluation["overall_match"]) / 100
         )
 
-        col1, col2 = st.columns(2)
+        # ==================================================
+        # Core Metrics
+        # ==================================================
+
+        col1, col2, col3 = st.columns(3)
 
         with col1:
 
             st.metric(
                 "Overall Match",
-                f"{evaluation['overall_match']}%"
+                f"{evaluation['overall_match']:.2f}%"
             )
 
             st.metric(
-                "Semantic Score",
-                f"{round(top['semantic_score']*100,2)}%"
+                "Semantic",
+                f"{top['semantic_score']*100:.1f}%"
             )
 
             st.metric(
-                "Direct Skills",
-                len(top["matched_skills"])
+                "Recommendation",
+                evaluation["recommendation"]
             )
 
         with col2:
 
             st.metric(
-                "Learning",
-                learning["learning_potential"]
+                "Production",
+                f"{top.get('production_score',0)*100:.1f}%"
+            )
+
+            st.metric(
+                "Behavior",
+                f"{top['behavior_score']*100:.1f}%"
+            )
+
+            st.metric(
+                "Confidence",
+                evaluation["confidence"]
+            )
+
+        with col3:
+
+            st.metric(
+                "Profile Consistency",
+                f"{top.get('profile_consistency',1)*100:.1f}%"
             )
 
             st.metric(
@@ -166,9 +206,13 @@ def show_top_candidate(results, container):
             )
 
             st.metric(
-                "Confidence",
-                evaluation["confidence"]
+                "Direct Skills",
+                len(top["matched_skills"])
             )
+
+        # ==================================================
+        # Recommendation Banner
+        # ==================================================
 
         recommendation = evaluation["recommendation"]
 
@@ -192,25 +236,86 @@ def show_top_candidate(results, container):
 
             st.error("🔴 REJECT")
 
+        # ==================================================
+        # Matched Skills
+        # ==================================================
+
+        st.markdown("---")
+
+        left, right = st.columns(2)
+
+        with left:
+
+            st.markdown("### ✅ Direct Skill Matches")
+
+            if top["matched_skills"]:
+
+                for skill in top["matched_skills"]:
+
+                    st.success(skill.title())
+
+            else:
+
+                st.info("No direct matches.")
+
+        with right:
+
+            st.markdown("### ❌ Missing Skills")
+
+            if top["missing_skills"]:
+
+                for skill in top["missing_skills"]:
+
+                    st.error(skill.title())
+
+            else:
+
+                st.success("No missing skills.")
+
+        # ==================================================
+        # Production Evidence
+        # ==================================================
+
+        evidence = top.get(
+            "production_evidence",
+            []
+        )
+
+        if evidence:
+
+            st.markdown("---")
+
+            st.markdown("### 🚀 Production AI Experience")
+
+            cols = st.columns(min(4, len(evidence)))
+
+            for i, item in enumerate(evidence[:8]):
+
+                cols[i % len(cols)].info(item.title())
+
+        # ==================================================
+        # AI Decision Summary
+        # ==================================================
+
         st.markdown("---")
 
         st.subheader("🧠 AI Decision Summary")
 
-        summary = []
+        for item in evaluation["strengths"][:6]:
 
-        if evaluation["strengths"]:
-            summary.extend(evaluation["strengths"][:3])
+            st.write(f"✅ {item}")
 
-        if learning["explanation"]:
-            summary.extend(learning["explanation"][:2])
+        # ==================================================
+        # Submission Reasoning
+        # ==================================================
 
-        seen = set()
+        st.markdown("---")
 
-        for point in summary:
+        st.subheader("📝 Recruiter Summary")
 
-            if point not in seen:
-                st.write(f"✅ {point}")
-                seen.add(point)
+        st.info(
+            evaluation["submission_reasoning"]
+        )
 
 # ----------------------------------------------------------
 # KPI Cards
@@ -220,68 +325,131 @@ def show_metrics(results):
 
     st.markdown("---")
 
-    st.subheader("📊 Dashboard Metrics")
+    st.subheader("📊 Recruiter Intelligence Dashboard")
 
     if results is None:
 
         st.info(
-
             "Metrics will appear after analysis."
-
         )
 
         return
 
     ranked = results["ranked_candidates"]
-
     evaluation = results["evaluation"]
-
-    learning = results["learning"]
-
     top = ranked[0]
 
-    col1, col2, col3, col4 = st.columns(4)
+    # ----------------------------------------------------------
+    # First Row
+    # ----------------------------------------------------------
+
+    col1, col2, col3 = st.columns(3)
 
     with col1:
 
         st.metric(
-
-            "Candidates",
-
-            len(ranked)
-
+            "Candidates Ranked",
+            f"{len(ranked):,}"
         )
 
     with col2:
 
         st.metric(
-
-            "Best Candidate Score",
-
-            f"{evaluation['overall_match']}%"
-
+            "Overall Match",
+            f"{evaluation['overall_match']:.2f}%"
         )
 
     with col3:
 
         st.metric(
-
-            "Learning",
-
-            learning["learning_potential"]
-
+            "Recommendation",
+            evaluation["recommendation"]
         )
 
-    with col4:
+    # ----------------------------------------------------------
+    # Second Row
+    # ----------------------------------------------------------
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
 
         st.metric(
-
-            "Transferable Skills",
-
-            top["num_transferable_matches"]
-
+            "Semantic Score",
+            f"{top['semantic_score']*100:.1f}%"
         )
 
+    with col2:
+
+        st.metric(
+            "Skill Match",
+            f"{top['skill_match']*100:.1f}%"
+        )
+
+    with col3:
+
+        st.metric(
+            "Experience",
+            "✓ Yes" if top["experience_match"] else "✗ No"
+        )
+
+    # ----------------------------------------------------------
+    # Third Row
+    # ----------------------------------------------------------
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+
+        st.metric(
+            "Production Score",
+            f"{top.get('production_score',0)*100:.1f}%"
+        )
+
+    with col2:
+
+        st.metric(
+            "Behavior Score",
+            f"{top['behavior_score']*100:.1f}%"
+        )
+
+    with col3:
+
+        st.metric(
+            "Profile Consistency",
+            f"{top.get('profile_consistency',1)*100:.1f}%"
+        )
+
+    # ----------------------------------------------------------
+    # Fourth Row
+    # ----------------------------------------------------------
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+
+        st.metric(
+            "Transferable Skills",
+            top["num_transferable_matches"]
+        )
+
+    with col2:
+
+        matched = len(top["matched_skills"])
+        missing = len(top["missing_skills"])
+
+        total = matched + missing
+
+        coverage = (
+            matched / total * 100
+            if total
+            else 100
+        )
+
+        st.metric(
+            "Skill Coverage",
+            f"{coverage:.1f}%"
+        )
 
 # ----------------------------------------------------------
 # Ranking Table
@@ -306,18 +474,41 @@ def show_ranking_table(results):
 
     rows = []
 
+    recommendations = {
+        "Strong Hire": "🟢",
+        "Interview": "🔵",
+        "Consider": "🟡",
+        "Review": "🟠",
+        "Reject": "🔴"
+    }
+
     for index, candidate in enumerate(candidates[:10], start=1):
 
         matched = len(candidate["matched_skills"])
         missing = len(candidate["missing_skills"])
 
-        total_required = matched + missing
+        total = matched + missing
 
         coverage = (
-            round((matched / total_required) * 100, 1)
-            if total_required > 0
+            round(matched / total * 100, 1)
+            if total
             else 100
         )
+
+        if candidate["final_score"] >= 0.85:
+            recommendation = "Strong Hire"
+
+        elif candidate["final_score"] >= 0.75:
+            recommendation = "Interview"
+
+        elif candidate["final_score"] >= 0.65:
+            recommendation = "Consider"
+
+        elif candidate["final_score"] >= 0.50:
+            recommendation = "Review"
+
+        else:
+            recommendation = "Reject"
 
         rows.append({
 
@@ -325,23 +516,47 @@ def show_ranking_table(results):
 
             "Candidate": candidate["name"],
 
-            "Overall Score": round(
+            "Overall": round(
                 candidate["final_score"] * 100,
                 2
             ),
 
-            "Semantic %": round(
+            "Semantic": round(
                 candidate["semantic_score"] * 100,
-                2
+                1
             ),
 
-            "Coverage %": coverage,
+            "Production": round(
+                candidate.get(
+                    "production_score",
+                    0
+                ) * 100,
+                1
+            ),
 
-            "Direct": matched,
+            "Behavior": round(
+                candidate["behavior_score"] * 100,
+                1
+            ),
 
-            "Transferable": candidate[
+            "Consistency": round(
+                candidate.get(
+                    "profile_consistency",
+                    1
+                ) * 100,
+                1
+            ),
+
+            "Coverage": coverage,
+
+            "Transfer": candidate[
                 "num_transferable_matches"
-            ]
+            ],
+
+            "Recommendation":
+                recommendations[
+                    recommendation
+                ]
 
         })
 
@@ -403,84 +618,66 @@ def show_ranking_table(results):
 
     )
 
-    # ----------------------------------------------------------
-    # Candidate Scores
-    # ----------------------------------------------------------
+    # ==========================================================
+    # Score Cards
+    # ==========================================================
 
     col1, col2, col3 = st.columns(3)
-
-    matched = len(candidate["matched_skills"])
-    missing = len(candidate["missing_skills"])
-
-    total = matched + missing
-
-    coverage = (
-
-        round(
-
-            matched / total * 100,
-
-            1
-
-        )
-
-        if total
-
-        else 100
-
-    )
 
     with col1:
 
         st.metric(
-
-            "Overall Score",
-
+            "Overall",
             f"{candidate['final_score']*100:.2f}%"
-
         )
 
         st.metric(
-
             "Semantic",
-
             f"{candidate['semantic_score']*100:.2f}%"
+        )
 
+        st.metric(
+            "Production",
+            f"{candidate.get('production_score',0)*100:.2f}%"
         )
 
     with col2:
 
         st.metric(
-
-            "Direct Skills",
-
-            matched
-
+            "Behavior",
+            f"{candidate['behavior_score']*100:.2f}%"
         )
 
         st.metric(
+            "Consistency",
+            f"{candidate.get('profile_consistency',1)*100:.2f}%"
+        )
 
+        st.metric(
             "Transferable",
-
             candidate["num_transferable_matches"]
-
         )
 
     with col3:
 
         st.metric(
+            "Direct Skills",
+            len(candidate["matched_skills"])
+        )
 
-            "Skill Coverage",
+        st.metric(
+            "Missing Skills",
+            len(candidate["missing_skills"])
+        )
 
-            f"{coverage}%"
-
+        st.metric(
+            "Experience",
+            "✓"
+            if candidate["experience_match"]
+            else "✗"
         )
 
     st.markdown("---")
-
-    # ----------------------------------------------------------
-    # Skills
-    # ----------------------------------------------------------
 
     left, right = st.columns(2)
 
@@ -492,13 +689,13 @@ def show_ranking_table(results):
 
             for skill in candidate["matched_skills"]:
 
-                st.success(skill)
+                st.success(skill.title())
 
         else:
 
-            st.warning("No direct matches.")
+            st.info("No direct matches.")
 
-        st.markdown("### ❌ Missing Direct Skills")
+        st.markdown("### ❌ Missing Skills")
 
         if candidate["missing_skills"]:
 
@@ -515,41 +712,42 @@ def show_ranking_table(results):
         st.markdown("### 🔄 Transferable Skills")
 
         transfer = candidate.get(
-
             "transferable_matches",
-
             []
-
         )
 
         if transfer:
 
             for match in transfer:
 
-                confidence = int(
-
-                    match["confidence"] * 100
-
-                )
-
                 st.info(
 
-                    f"""**{match['candidate_skill'].title()} → {match['required_skill'].title()}**
+                    f"{match['candidate_skill'].title()} → "
 
-**Confidence:** {confidence}%
+                    f"{match['required_skill'].title()} "
 
-**Reason:** {match['reason']}"""
+                    f"({int(match['confidence']*100)}%)"
 
                 )
 
         else:
 
             st.success(
-
-                "No transferable skills required."
-
+                "No transferable skills."
             )
 
+        evidence = candidate.get(
+            "production_evidence",
+            []
+        )
+
+        if evidence:
+
+            st.markdown("### 🚀 Production Evidence")
+
+            for item in evidence:
+
+                st.success(item.title())
 
 # ----------------------------------------------------------
 # Candidate Intelligence
@@ -575,19 +773,24 @@ def show_insights(results):
 
     comparison = results["comparison"]
 
-    tab1, tab2, tab3 = st.tabs(
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(
 
         [
 
             "💪 Strengths & Gaps",
 
-            "📚 Learning Potential",
+            "📚 Learning",
 
-            "⚖ Candidate Comparison"
+            "⚖ Comparison",
+
+            "🧠 Recruiter Intelligence",
+
+            "🛡 Profile Validation"
 
         ]
 
     )
+
 
     # ----------------------------------------------------------
     # Strengths
@@ -651,15 +854,15 @@ def show_insights(results):
 
                 "Learning Score",
 
-                learning["learning_score"]
+                f"{learning['learning_score']:.2f}"
 
             )
 
         with col2:
 
-            st.markdown("### 📖 AI Explanation")
-
-            if learning["explanation"]:
+            st.markdown("### AI Explanation")
+            
+            if learning.get("explanation"):
 
                 for item in learning["explanation"]:
 
@@ -667,9 +870,7 @@ def show_insights(results):
 
             else:
 
-                st.info(
-                    "No additional learning insights."
-                )
+                st.info("No learning insights available.")
 
     # ----------------------------------------------------------
     # Comparison
@@ -677,28 +878,158 @@ def show_insights(results):
 
     with tab3:
 
-        st.markdown("### 🤖 AI Recommendation")
+        if comparison is None:
 
-        st.info(
+            st.info("Only one candidate available.")
 
-            comparison["recommendation"]
+        else:
+
+            st.markdown("### AI Recommendation")
+
+            st.info(
+                comparison["recommendation"]
+            )
+
+            st.markdown("### Competitive Advantages")
+
+            if comparison["advantages"]:
+
+                for item in comparison["advantages"]:
+
+                    st.success(item)
+
+            else:
+
+                st.info(
+                    "No major competitive advantages."
+                )
+
+    with tab4:
+
+        top = results["ranked_candidates"][0]
+
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+
+            st.metric(
+
+                "Production Score",
+
+                f"{top.get('production_score',0)*100:.1f}%"
+
+            )
+
+        with col2:
+
+            st.metric(
+
+                "Behavior Score",
+
+                f"{top.get('behavior_score', 0)*100:.1f}%"
+
+            )
+
+        with col3:
+
+            st.metric(
+
+                "Profile Consistency",
+
+                f"{top.get('profile_consistency',1)*100:.1f}%"
+
+            )
+
+        st.markdown("---")
+
+        evidence = top.get(
+
+            "production_evidence",
+
+            []
 
         )
 
-        st.markdown("### ⭐ Competitive Advantages")
+        st.markdown("### 🚀 Production Experience")
 
-        if comparison["advantages"]:
+        if evidence:
 
-            for item in comparison["advantages"]:
+            cols = st.columns(
 
-                st.success(item)
+                min(4, len(evidence))
+
+            )
+
+            for i, item in enumerate(evidence):
+
+                cols[i % len(cols)].success(
+
+                    item.title()
+
+                )
 
         else:
 
             st.info(
-                "No notable competitive advantages."
+
+                "No production indicators detected."
+
             )
-            
+
+        st.markdown("---")
+
+        st.markdown("### 📝 Recruiter Summary")
+
+        st.info(
+
+            evaluation["submission_reasoning"]
+
+        )
+
+    with tab5:
+
+        top = results["ranked_candidates"][0]
+
+        st.metric(
+
+            "Consistency",
+
+            f"{top.get('profile_consistency',1)*100:.1f}%"
+
+        )
+
+        st.metric(
+
+            "Risk",
+
+            f"{top.get('profile_risk',0)*100:.1f}%"
+
+        )
+
+        validation = top.get(
+
+            "profile_validation",
+
+            []
+
+        )
+
+        if validation:
+
+            st.markdown("### Validation Findings")
+
+            for item in validation:
+
+                st.warning(item)
+
+        else:
+
+            st.success(
+
+                "No profile consistency concerns detected."
+
+            )       
+                     
 # ----------------------------------------------------------
 # Analytics Dashboard
 # ----------------------------------------------------------

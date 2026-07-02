@@ -74,7 +74,7 @@ DATA_PATH = os.path.join(
 
 if "service" not in st.session_state:
 
-    st.session_state.service = RecruiterService(DATA_PATH)
+    st.session_state.service = RecruiterService()
 
 # ----------------------------------------------------------
 # Session State

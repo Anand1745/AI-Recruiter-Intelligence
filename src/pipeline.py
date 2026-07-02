@@ -1,30 +1,19 @@
-from src.data_loader import CandidateDataLoader
-from src.candidate_processor import CandidateProcessor
 from src.jd_parser import JDParser
-from src.semantic_matcher import SemanticMatcher
-from src.ranking_engine import RankingEngine
+from src.runtime_ranker import RuntimeRanker
 from src.reasoning_engine import ReasoningEngine
 from src.comparison_engine import ComparisonEngine
 from src.report_generator import ReportGenerator
 from src.learning_potential import LearningPotential
+from src.submission_exporter import SubmissionExporter
 
 
 class RecruiterPipeline:
 
-    def __init__(
-        self,
-        data_path
-    ):
-
-        self.loader = CandidateDataLoader(data_path)
-
-        self.processor = CandidateProcessor()
+    def __init__(self):
 
         self.parser = JDParser()
 
-        self.matcher = SemanticMatcher()
-
-        self.ranker = RankingEngine()
+        self.runtime_ranker = RuntimeRanker()
 
         self.reasoner = ReasoningEngine()
 
@@ -34,14 +23,18 @@ class RecruiterPipeline:
 
         self.learning = LearningPotential()
 
+        self.exporter = SubmissionExporter()
+
+    # --------------------------------------------------
+
     def run(
         self,
         job_description,
-        limit=100
+        limit=None
     ):
 
         # ----------------------------------------
-        # Parse Job Description
+        # Parse JD
         # ----------------------------------------
 
         parsed_jd = self.parser.parse(
@@ -49,84 +42,16 @@ class RecruiterPipeline:
         )
 
         # ----------------------------------------
-        # Load Candidates
+        # Rank Candidates
         # ----------------------------------------
 
-        candidates = self.loader.load_candidates()
+        ranked = self.runtime_ranker.rank_candidates(
 
-        candidates = candidates[:limit]
+            job_description,
 
-        scores = []
+            parsed_jd,
 
-        # ----------------------------------------
-        # Rank Every Candidate
-        # ----------------------------------------
-
-        for candidate in candidates:
-
-            profile = self.processor.process_profile(
-                candidate
-            )
-
-            skills = self.processor.process_skills(
-                candidate
-            )
-
-            redrob = self.processor.process_redrob(
-                candidate
-            )
-
-            candidate_text = " ".join([
-
-                profile["headline"] or "",
-
-                profile["summary"] or "",
-
-                skills["skills_text"]
-
-            ])
-
-            semantic_score = self.matcher.similarity(
-
-                job_description,
-
-                candidate_text
-
-            )
-
-            ranking = self.ranker.rank(
-
-                semantic_score,
-
-                profile,
-
-                skills,
-
-                parsed_jd,
-
-            )
-
-            scores.append({
-
-                "candidate_id": candidate["candidate_id"],
-
-                "name": profile["name"],
-
-                **ranking
-
-            })
-
-        # ----------------------------------------
-        # Sort Candidates
-        # ----------------------------------------
-
-        ranked = sorted(
-
-            scores,
-
-            key=lambda x: x["final_score"],
-
-            reverse=True
+            limit
 
         )
 
@@ -149,13 +74,13 @@ class RecruiterPipeline:
             }
 
         # ----------------------------------------
-        # Best Candidate
+        # Top Candidate
         # ----------------------------------------
 
         top_candidate = ranked[0]
 
         # ----------------------------------------
-        # AI Evaluation
+        # Evaluation
         # ----------------------------------------
 
         evaluation = self.reasoner.generate(
@@ -175,7 +100,7 @@ class RecruiterPipeline:
         )
 
         # ----------------------------------------
-        # Candidate Comparison
+        # Comparison
         # ----------------------------------------
 
         comparison = None
@@ -191,7 +116,7 @@ class RecruiterPipeline:
             )
 
         # ----------------------------------------
-        # Recruiter Report
+        # Report
         # ----------------------------------------
 
         report = self.reporter.generate(
@@ -199,13 +124,21 @@ class RecruiterPipeline:
             evaluation,
 
             comparison,
-            
+
             learning
 
         )
 
         # ----------------------------------------
-        # Return Complete Pipeline
+        # Export
+        # ----------------------------------------
+
+        self.exporter.export(
+
+            ranked
+
+        )
+
         # ----------------------------------------
 
         return {

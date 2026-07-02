@@ -1,16 +1,97 @@
+from datetime import datetime
+
 from src.recruiter_intelligence import RecruiterIntelligence
+from src.profile_validator import ProfileValidator
+from src.production_experience import ProductionExperienceScorer
+
 
 
 class RankingEngine:
 
     def __init__(self):
         self.intelligence = RecruiterIntelligence()
+        
+        self.validator = ProfileValidator()
+        
+        self.production = ProductionExperienceScorer()
+
+    # ---------------------------------------------------
+    # Behavioral Intelligence
+    # ---------------------------------------------------
+
+    def behavior_score(self, redrob):
+
+        score = 0.0
+
+        # Open to Work
+        if redrob["open_to_work"]:
+            score += 0.20
+
+        # Recruiter Response Rate (0-1)
+        score += 0.25 * redrob["recruiter_response_rate"]
+
+        # Profile Completeness (0-100)
+        score += 0.15 * (redrob["profile_score"] / 100)
+
+        # GitHub Activity (-1 means unavailable)
+        github = max(redrob["github_score"], 0)
+        score += 0.10 * (github / 100)
+
+        # Interview Completion (0-1)
+        score += 0.05 * redrob["interview_completion_rate"]
+
+        # Offer Acceptance (-1 means unavailable)
+        offer = max(redrob["offer_acceptance_rate"], 0)
+        score += 0.05 * offer
+
+        # Recent Activity
+
+        try:
+
+            last = datetime.strptime(
+                redrob["last_active_date"],
+                "%Y-%m-%d"
+            )
+
+            # Fixed reference date for reproducible scoring
+            reference_date = datetime(2026, 6, 30)
+
+            days = (reference_date - last).days
+
+            if days <= 30:
+                score += 0.20
+
+            elif days <= 90:
+                score += 0.15
+
+            elif days <= 180:
+                score += 0.10
+
+            else:
+                score += 0.05
+
+        except Exception:
+            # Unknown activity date gets a neutral score
+            score += 0.10
+
+        # ---------------------------------------------
+        # Normalize and Return
+        # ---------------------------------------------
+
+        score = min(score, 1.0)
+
+        return score
+    
+    # ---------------------------------------------------
+    # Ranking
+    # ---------------------------------------------------
 
     def rank(
         self,
         semantic_score,
         profile,
         skills,
+        redrob,
         parsed_jd
     ):
 
@@ -97,16 +178,55 @@ class RankingEngine:
         )
 
         # ---------------------------------------------------
+        # Behavioral Intelligence
+        # ---------------------------------------------------
+
+        behavior = self.behavior_score(redrob)
+        
+        # ---------------------------------------------------
+        # Profile Consistency
+        # ---------------------------------------------------
+
+        validation = self.validator.evaluate(
+
+            profile,
+
+            skills,
+
+            redrob
+
+        )
+
+        risk_score = validation["risk_score"]
+
+        consistency_score = validation["consistency_score"]
+        
+        # ---------------------------------------------------
+        # Production Experience
+        # ---------------------------------------------------
+
+        
+        production = self.production.evaluate(profile)
+
+        production_score = production["production_score"]
+
+        # ---------------------------------------------------
         # Weighted Components
         # ---------------------------------------------------
 
         semantic_component = semantic_score * 0.35
 
-        skill_component = skill_match * 0.50
+        skill_component = skill_match * 0.45
 
         experience_component = experience_score * 0.10
 
         transfer_component = transferable_bonus
+
+        behavior_component = behavior * 0.05
+        
+        risk_component = risk_score * 0.05
+        
+        production_component = production_score * 0.05
 
         # ---------------------------------------------------
         # Final Score
@@ -117,6 +237,14 @@ class RankingEngine:
             + skill_component
             + experience_component
             + transfer_component
+            + behavior_component
+            + production_component
+            - risk_component
+        )
+        
+        final_score = max(
+            final_score,
+            0.0
         )
 
         final_score = min(final_score, 1.0)
@@ -163,6 +291,11 @@ class RankingEngine:
                 4
             ),
 
+            "behavior_score": round(
+                behavior,
+                4
+            ),
+
             "semantic_component": round(
                 semantic_component,
                 4
@@ -183,9 +316,32 @@ class RankingEngine:
                 4
             ),
 
+            "behavior_component": round(
+                behavior_component,
+                4
+            ),
+
             "final_score": round(
                 final_score,
                 4
-            )
+            ),
+            
+            "profile_risk": round(
+                risk_score,
+                4
+            ),
+
+            "profile_consistency": round(
+                consistency_score,
+                4
+            ),
+
+            "profile_validation": validation["reasons"],
+            
+            "production_score": round(production_score, 4),
+
+            "production_component": round(production_component, 4),
+
+            "production_evidence": production["production_evidence"],
 
         }
