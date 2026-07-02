@@ -298,19 +298,6 @@ python main.py
 python validate_submission.py submissions/submission.csv
 ```
 
----
-
-# Future Improvements
-
-- Cross-Encoder Re-ranking
-- Learning-to-Rank Models
-- FAISS Vector Search
-- Multi-Agent Recruiter Workflow
-- Recruiter Feedback Learning
-- Resume Parsing using LLMs
-
----
-
 # License
 
 Released under the MIT License.
