@@ -146,7 +146,7 @@ pip install -r requirements.txt
 
 # Dataset
 
-The challenge dataset is provided by the organizers and should be placed in:
+The challenge dataset is provided by the organizers or any other dataset should be placed in(renamed to candidates.jsonl if needed):
 
 ```
 data/candidates.jsonl
