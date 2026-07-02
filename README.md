@@ -152,10 +152,6 @@ The challenge dataset is provided by the organizers and should be placed in:
 data/candidates.jsonl
 ```
 
-A small sample dataset is included for demonstration and dashboard testing.
-
----
-
 # One-Time Preprocessing
 
 The ranking system uses precomputed embeddings for fast inference.
